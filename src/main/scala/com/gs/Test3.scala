@@ -1,25 +1,42 @@
 package com.gs
 
+import scala.collection.mutable
 import scala.runtime.Nothing$
+import scala.util.{Failure, Success, Try}
 
 object Test3 {
-  var d = ("Mile",123,3.5)
-  d = new Tuple3("dfad",33,3)
-  val e = new Tuple3[String,String,Int]("gao","sen",22)
-
-  var x = new Tuple22(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
-  //x = new Tuple23(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23) error Tuple max is 22
-
-  //对Tuple进行遍历操作
-  d.productIterator.foreach(s => println())
-  d.productIterator.map(x => x+"!").foreach(s => println(s))
-
-  println(d._2)
-
-  val (name,verb,any) = d
+//  var d = ("Mile",123,3.5)
+//  d = new Tuple3("dfad",33,3)
+//  val e = new Tuple3[String,String,Int]("gao","sen",22)
+//
+//  var x = new Tuple22(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
+//  //x = new Tuple23(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23) error Tuple max is 22
+//
+//  //对Tuple进行遍历操作
+//  d.productIterator.foreach(s => println())
+//  d.productIterator.map(x => x+"!").foreach(s => println(s))
+//
+//  println(d._2)
+//
+//  val (name,verb,any) = d
 
   def main(args: Array[String]): Unit = {
-    demo1()
+    //demo1()
+    to_int("555") match{
+      case Some(v) => println("The value is : %s".format(v))
+      case None => println("Convert failed")
+    }
+    println(to_int("xx").getOrElse(0))
+
+    divideBy(100,0) match {
+      case Left(s) => println(s)
+      case Right(v) => println("right = %d".format(v))
+    }
+
+    Try(100/0) match {
+      case Success(a) => println("The value is : %d".format(a))
+      case Failure(b) => println("Failed!")
+    }
   }
 
   def demo1()={
@@ -134,8 +151,28 @@ object Test3 {
   //case object Nil extends List[Nothing]
   //object None extends Option[Nothing]
 
-  
+  //Option 类型示例
+  //Option --> Some ,None
+  def to_int(x: Any): Option[Int] = {
+    try{
+      Some(x.toString().toInt)
+    }
+    catch{
+      case e: java.lang.Exception => None
+    }
+  }
 
+  def to_int1(s: Any) = Try(s.toString.toInt).toOption.getOrElse(0)
+
+  //Either --> value1,value2  (返回两个完全不同的数据类型）
+  def divideBy(x: Int,y: Int):Either[String,Int] = if(y == 0) Left("Dude,can't divide by 0") else Right(x/y)
+
+  //Try --> Success,Failure
+  Try(100/0)
+  Try(200/33)
+
+  //匿名函数
+  def ic = (x: Int) => x+1
 
 }
 
